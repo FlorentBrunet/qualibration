@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox fx:id="rootNode" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="nameLabel" text="Label" />
+      <Label fx:id="pathLabel" text="Label" textFill="#808080">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+   </children>
+</VBox>
