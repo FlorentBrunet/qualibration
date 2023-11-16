@@ -1,14 +1,20 @@
-# Calibrator
+# Qualibration
 
-It's been years since I felt the need for a handy tool to calibrate cameras.
+It's been years since I felt the need for a handy GUI/tool to calibrate cameras.
 
-For now, this tool entirely relies on a subset of the calibration features provided by BoofCV.
+For now, this tool is very basic: select calibration images, enter calibration parameters (calibration target
+dimensions), click on the "Calibrate" button and that's it!
+
+Technically, it's "just" a wrapper around a subset of the calibration methods provided
+by [BoofCV](https://boofcv.org/index.php?title=Main_Page).
+It's intended to grow with new features: region-of-interest related stuff, handling of very small calibration targets,
+nice visualizations, tools around distortions, ...
 
 ## References
 
-- BoofCV
-- Bouguet Calibration Toolbox
-- Zang paper
+- [BoofCV](https://boofcv.org/index.php?title=Main_Page)
+- [Bouguet's Camera Calibration Toolbox](http://robots.stanford.edu/cs223b04/JeanYvesCalib/)
+- [Zhang's calibration method paper](https://www.microsoft.com/en-us/research/project/a-flexible-new-technique-for-camera-calibration-2/?from=https://research.microsoft.com/en-us/um/people/zhang/Calib/&type=exact)
 
 ## Prerequisites
 
@@ -23,5 +29,14 @@ mvn clean package
 ## Run
 
 ```shell
-java -jar target/calibrator-X.Y.Z.jar
+java -jar target/qualibration-X.Y.Z.jar
 ```
+
+## Disclaimer
+
+This code is not an example of clean code. It compiles, it works, it is readable, but it is definitely not an example to
+follow in terms of JavaFX development :) And by the way, where are the tests?!
+
+## License
+
+[MIT](LICENSE)
