@@ -1,4 +1,4 @@
-package eu.brnt.calibrator.model;
+package eu.brnt.qualibration.model;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.WritableImage;

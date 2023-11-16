@@ -1,7 +1,7 @@
-package eu.brnt.calibrator.controller;
+package eu.brnt.qualibration.controller;
 
-import eu.brnt.calibrator.model.CalibrationImage;
-import eu.brnt.calibrator.view.ViewFactory;
+import eu.brnt.qualibration.model.CalibrationImage;
+import eu.brnt.qualibration.view.ViewFactory;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -44,7 +44,7 @@ public class MainWindowController extends BaseController implements Initializabl
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Platform.runLater(() -> ((Stage) rootPane.getScene().getWindow()).setTitle("Calibrator"));
+        Platform.runLater(() -> ((Stage) rootPane.getScene().getWindow()).setTitle("Qualibration"));
 
         imagesListView.setCellFactory(p -> new CalibrationImageCell());
         imagesListView.setItems(FXCollections.observableList(calibrationImages));

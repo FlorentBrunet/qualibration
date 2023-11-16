@@ -1,6 +1,6 @@
-package eu.brnt.calibrator.controller;
+package eu.brnt.qualibration.controller;
 
-import eu.brnt.calibrator.view.ViewFactory;
+import eu.brnt.qualibration.view.ViewFactory;
 
 public abstract class BaseController {
 

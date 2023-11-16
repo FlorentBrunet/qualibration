@@ -1,4 +1,4 @@
-package eu.brnt.calibrator;
+package eu.brnt.qualibration;
 
 import boofcv.abst.fiducial.calib.ConfigGridDimen;
 import boofcv.abst.geo.calibration.CalibrateMonoPlanar;

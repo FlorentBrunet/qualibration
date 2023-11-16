@@ -1,6 +1,6 @@
-package eu.brnt.calibrator.controller;
+package eu.brnt.qualibration.controller;
 
-import eu.brnt.calibrator.model.CalibrationImage;
+import eu.brnt.qualibration.model.CalibrationImage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -28,7 +28,7 @@ public class CalibrationImageCell extends ListCell<CalibrationImage> {
             setGraphic(null);
         } else {
             if (loader == null) {
-                loader = new FXMLLoader(getClass().getResource("/eu/brnt/calibrator/view/CalibrationImageCell.fxml"));
+                loader = new FXMLLoader(getClass().getResource("/eu/brnt/qualibration/view/CalibrationImageCell.fxml"));
                 loader.setController(this);
                 try {
                     loader.load();

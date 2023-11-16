@@ -1,7 +1,7 @@
-package eu.brnt.calibrator.view;
+package eu.brnt.qualibration.view;
 
-import eu.brnt.calibrator.controller.BaseController;
-import eu.brnt.calibrator.controller.MainWindowController;
+import eu.brnt.qualibration.controller.BaseController;
+import eu.brnt.qualibration.controller.MainWindowController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

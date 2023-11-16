@@ -1,6 +1,6 @@
-package eu.brnt.calibrator;
+package eu.brnt.qualibration;
 
-import eu.brnt.calibrator.view.ViewFactory;
+import eu.brnt.qualibration.view.ViewFactory;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
