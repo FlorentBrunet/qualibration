@@ -13,6 +13,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -21,6 +22,8 @@
       <HBox>
          <children>
             <Button mnemonicParsing="false" onAction="#onOpenClicked" text="Open" />
+            <Region prefHeight="8.0" HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" onAction="#onHelpClicked" prefWidth="26.0" text="?" />
          </children>
          <padding>
             <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />

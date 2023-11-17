@@ -250,6 +250,15 @@ public class MainWindowController extends BaseController implements Initializabl
         updateResult();
     }
 
+    @FXML
+    void onHelpClicked() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("About");
+        alert.setHeaderText("Qualibration 0.1");
+        alert.setContentText("MIT License\nCopyright © 2023, Florent Brunet\nhttps://github.com/FlorentBrunet/qualibration");
+        alert.showAndWait();
+    }
+
     private void updateResult() {
         if (project == null || project.getCameraPinholeBrown() == null)
             return;
