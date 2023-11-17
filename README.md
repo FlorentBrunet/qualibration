@@ -2,13 +2,15 @@
 
 It's been years since I felt the need for a handy GUI/tool to calibrate cameras.
 
-For now, this tool is very basic: select calibration images, enter calibration parameters (calibration target
-dimensions), click on the "Calibrate" button and that's it!
+For now, this tool is very basic: select calibration images, enter target parameters, auto-detect corners, click on
+the "Calibrate" button and that's it!
 
 Technically, it's "just" a wrapper around a subset of the calibration methods provided
 by [BoofCV](https://boofcv.org/index.php?title=Main_Page).
 It's intended to grow with new features: region-of-interest related stuff, handling of very small calibration targets,
 nice visualizations, tools around distortions, ...
+
+![Screenshot of the main screen](/doc/main_screen.png)
 
 ## References
 
@@ -35,7 +37,7 @@ java -jar target/qualibration-X.Y.Z.jar
 ## Disclaimer
 
 This code is not an example of clean code. It compiles, it works, it is readable, but it is definitely not an example to
-follow in terms of JavaFX development :) And by the way, where are the tests?!
+follow in terms of JavaFX development, nor is it an example of UI/UX design :) And by the way, where are the tests?!
 
 ## License
 
