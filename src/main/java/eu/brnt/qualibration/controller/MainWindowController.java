@@ -14,6 +14,9 @@ import com.google.gson.GsonBuilder;
 import eu.brnt.qualibration.model.CalibrationImage;
 import eu.brnt.qualibration.model.CameraDefinition;
 import eu.brnt.qualibration.model.Project;
+import eu.brnt.qualibration.model.configuration.Configuration;
+import eu.brnt.qualibration.model.configuration.ObservationPointConfig;
+import eu.brnt.qualibration.model.configuration.ObservationPointRainbowConfig;
 import eu.brnt.qualibration.view.ViewFactory;
 import georegression.struct.point.Point2D_F64;
 import javafx.application.Platform;
@@ -28,6 +31,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +41,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -66,6 +71,7 @@ public class MainWindowController extends BaseController implements Initializabl
 
     private Project project;
     private final UiState uiState = new UiState();
+    private final Configuration configuration = new Configuration();
 
     private enum ImageSortOrder {
         FILE_NAME
@@ -97,10 +103,10 @@ public class MainWindowController extends BaseController implements Initializabl
         });
 
         rowsCountSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 5)
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 14)
         );
         columnsCountSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 7)
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 13)
         );
 
         radialParamsSpinner.setValueFactory(
@@ -314,33 +320,99 @@ public class MainWindowController extends BaseController implements Initializabl
         } else {
             double zoom = uiState.zoomFactor;
             gc.drawImage(curImage, 0, 0, curImage.getWidth() * zoom, curImage.getHeight() * zoom);
-            drawCalibrationPoints(gc, calibrationImage);
+
+            switch (configuration.getObservationPointConfig().getObservationPointDisplayType()) {
+                case RAINBOW -> drawCalibrationPointsRainbow(gc, calibrationImage);
+                default -> drawCalibrationPointsBasic(gc, calibrationImage);
+            }
         }
     }
 
-    private void drawCalibrationPoints(GraphicsContext gc, CalibrationImage calibrationImage) {
+    private void drawCalibrationPointsBasic(GraphicsContext gc, CalibrationImage calibrationImage) {
         if (calibrationImage == null || calibrationImage.getDetectedPoints() == null)
             return;
 
         CalibrationObservation observations = calibrationImage.getDetectedPoints();
 
+        ObservationPointConfig obsConfig = configuration.getObservationPointConfig();
+        if (obsConfig.isShowPointIndexes()) {
+            gc.setFont(new Font("SansSerif", obsConfig.getFontSize()));
+            gc.setFill(Color.RED);
+        }
+
+        gc.setStroke(Color.RED);
+
         for (PointIndex2D_F64 indexedPoint : observations.getPoints()) {
             Point2D_F64 point = indexedPoint.getP();
 
-            double x = point.getX();
-            double y = point.getY();
+            double x = point.getX() * uiState.zoomFactor;
+            double y = point.getY() * uiState.zoomFactor;
 
-            double zx = uiState.zoomFactor * x;
-            double zy = uiState.zoomFactor * y;
+            gc.strokeLine(x, y - 2, x, y + 2);
+            gc.strokeLine(x - 2, y, x + 2, y);
 
-            gc.setStroke(Color.RED);
+            if (obsConfig.isShowPointIndexes()) {
+                int index = indexedPoint.getIndex();
+                gc.fillText(String.valueOf(index), x + 2, y + 2);
+            }
+        }
+    }
 
-            gc.strokeLine(zx, zy - 2, zx, zy + 2);
-            gc.strokeLine(zx - 2, zy, zx + 2, zy);
+    private void drawCalibrationPointsRainbow(GraphicsContext gc, CalibrationImage calibrationImage) {
+        if (calibrationImage == null || calibrationImage.getDetectedPoints() == null)
+            return;
 
-            int index = indexedPoint.getIndex();
-            gc.setFill(Color.RED);
-            gc.fillText(String.valueOf(index), zx + 2, zy + 2);
+        CalibrationObservation observations = calibrationImage.getDetectedPoints();
+
+        int nPoints = observations.getPoints().size();
+
+        ArrayList<Color> colors = new ArrayList<>(nPoints);
+        for (int i = 0; i < nPoints; i++) {
+            double hue = 300.0 * i / (nPoints - 1.0);
+            colors.add(Color.hsb(hue, 1.0, 1.0));
+        }
+
+        ArrayList<PointIndex2D_F64> indexedPoints = new ArrayList<>(observations.getPoints());
+
+        ObservationPointConfig obsConfig = configuration.getObservationPointConfig();
+        ObservationPointRainbowConfig rainbowConfig = obsConfig.getRainbow();
+
+        gc.setLineWidth(rainbowConfig.getObservationPointLineWidth() * uiState.zoomFactor);
+        for (int i = 0; i < indexedPoints.size() - 1; i++) {
+            Point2D_F64 p1 = indexedPoints.get(i).getP();
+            Point2D_F64 p2 = indexedPoints.get(i + 1).getP();
+
+            double x1 = p1.getX() * uiState.zoomFactor;
+            double y1 = p1.getY() * uiState.zoomFactor;
+            double x2 = p2.getX() * uiState.zoomFactor;
+            double y2 = p2.getY() * uiState.zoomFactor;
+
+            gc.setStroke(colors.get(i));
+            gc.strokeLine(x1, y1, x2, y2);
+        }
+
+        if (obsConfig.isShowPointIndexes()) {
+            Font font = new Font("SansSerif", obsConfig.getFontSize());
+            gc.setFont(font);
+
+            gc.setStroke(Color.WHITE);
+            gc.setLineWidth(1);
+
+            for (int i = 0; i < indexedPoints.size(); i++) {
+                PointIndex2D_F64 indexedPoint = indexedPoints.get(i);
+                Point2D_F64 point = indexedPoint.getP();
+
+                double x = point.getX() * uiState.zoomFactor;
+                double y = point.getY() * uiState.zoomFactor;
+                double r = rainbowConfig.getObservationPointRadius() * uiState.zoomFactor;
+
+                gc.setFill(colors.get(i));
+                gc.fillOval(x - r, y - r, 2 * r, 2 * r);
+
+                String str = String.valueOf(indexedPoint.getIndex());
+                gc.strokeText(str, x, y);
+                gc.fillText(str, x, y);
+            }
         }
     }
 }
