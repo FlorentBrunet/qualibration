@@ -161,6 +161,11 @@ public class MainWindowController extends BaseController implements Initializabl
         reloadProject();
     }
 
+    @FXML
+    void onConfigurationClicked() {
+        viewFactory.showConfigurationWindow(rootNode.getScene().getWindow());
+    }
+
     private void reloadProject() {
         if (project != null) {
             ((Stage) rootNode.getScene().getWindow()).setTitle("Qualibration - " + project.getRootDir().getAbsolutePath());

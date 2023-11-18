@@ -1,6 +1,7 @@
 package eu.brnt.qualibration.view;
 
 import eu.brnt.qualibration.controller.BaseController;
+import eu.brnt.qualibration.controller.ConfigurationWindowController;
 import eu.brnt.qualibration.controller.MainWindowController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,6 +21,11 @@ public class ViewFactory {
     public void showMainWindow() {
         BaseController controller = new MainWindowController(this, "MainWindow.fxml");
         initializeStage(controller);
+    }
+
+    public void showConfigurationWindow(Window owner) {
+        BaseController controller = new ConfigurationWindowController(this, "ConfigurationWindow.fxml");
+        initializeStage(controller, Modality.WINDOW_MODAL, owner);
     }
 
     private void initializeStage(BaseController controller) {
