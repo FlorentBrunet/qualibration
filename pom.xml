@@ -76,18 +76,18 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
+                <version>3.11.0</version>
+                <!--<configuration>
                     <release>11</release>
-                </configuration>
+                </configuration>-->
             </plugin>
 
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.5</version>
+                <version>0.0.8</version>
                 <configuration>
-                    <release>11</release>
+                    <!--<release>11</release>-->
                     <mainClass>eu.brnt.qualibration.Launcher</mainClass>
                 </configuration>
             </plugin>
@@ -131,7 +131,7 @@
                 </executions>
             </plugin>
 
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.2.0</version>
@@ -156,14 +156,14 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
 
-            <plugin>
+            <!--<plugin>
                 <groupId>com.coderplus.maven.plugins</groupId>
                 <artifactId>copy-rename-maven-plugin</artifactId>
                 <version>1.0.1</version>
                 <executions>
-                    <!--<execution>
+                    &lt;!&ndash;<execution>
                         <id>rename-file</id>
                         <phase>package</phase>
                         <goals>
@@ -173,20 +173,20 @@
                             <sourceFile>${basedir}/clicker.bat</sourceFile>
                             <destinationFile>${basedir}/target/clicker-${project.version}.bat</destinationFile>
                         </configuration>
-                    </execution>-->
+                    </execution>&ndash;&gt;
                     <execution>
                         <id>copy-file</id>
                         <phase>package</phase>
                         <goals>
                             <goal>copy</goal>
                         </goals>
-                        <!--<configuration>
+                        &lt;!&ndash;<configuration>
                             <sourceFile>${basedir}/config.ini</sourceFile>
                             <destinationFile>${basedir}/target/config.ini</destinationFile>
-                        </configuration>-->
+                        </configuration>&ndash;&gt;
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
         </plugins>
 
         <resources>
