@@ -21,7 +21,12 @@
    <children>
       <HBox>
          <children>
-            <Button mnemonicParsing="false" onAction="#onOpenClicked" text="Open" />
+            <Button mnemonicParsing="false" onAction="#onOpenClicked" text="Open folder" />
+            <Button mnemonicParsing="false" onAction="#onConfigurationClicked" text="Configuration">
+               <HBox.margin>
+                  <Insets left="4.0" />
+               </HBox.margin>
+            </Button>
             <Region prefHeight="8.0" HBox.hgrow="ALWAYS" />
             <Button mnemonicParsing="false" onAction="#onHelpClicked" prefWidth="26.0" text="?" />
          </children>
