@@ -7,8 +7,8 @@ public class ObservationPointConfig {
 
     private ObservationPointDisplayType observationPointDisplayType = ObservationPointDisplayType.RAINBOW;
 
-    private double fontSize = 10;
+    private int fontSize = 10;
     private boolean showPointIndexes = true;
 
-    private ObservationPointRainbowConfig rainbow = new ObservationPointRainbowConfig();
+    private ObservationPointRainbowConfig observationPointRainbowConfig = new ObservationPointRainbowConfig();
 }

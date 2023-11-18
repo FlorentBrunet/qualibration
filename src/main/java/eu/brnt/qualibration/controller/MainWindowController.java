@@ -14,6 +14,7 @@ import com.google.gson.GsonBuilder;
 import eu.brnt.qualibration.model.CalibrationImage;
 import eu.brnt.qualibration.model.CameraDefinition;
 import eu.brnt.qualibration.model.Project;
+import eu.brnt.qualibration.model.ValueHolder;
 import eu.brnt.qualibration.model.configuration.Configuration;
 import eu.brnt.qualibration.model.configuration.ObservationPointConfig;
 import eu.brnt.qualibration.model.configuration.ObservationPointRainbowConfig;
@@ -71,7 +72,7 @@ public class MainWindowController extends BaseController implements Initializabl
 
     private Project project;
     private final UiState uiState = new UiState();
-    private final Configuration configuration = new Configuration();
+    private Configuration configuration = new Configuration();
 
     private enum ImageSortOrder {
         FILE_NAME
@@ -163,7 +164,13 @@ public class MainWindowController extends BaseController implements Initializabl
 
     @FXML
     void onConfigurationClicked() {
-        viewFactory.showConfigurationWindow(rootNode.getScene().getWindow());
+        ValueHolder<Configuration> result = new ValueHolder<>();
+        viewFactory.showConfigurationWindow(rootNode.getScene().getWindow(), configuration, result);
+        log.info("result={}", result.getValue());
+        if (result.getValue() != null) {
+            this.configuration = result.getValue();
+            redraw();
+        }
     }
 
     private void reloadProject() {
@@ -380,7 +387,7 @@ public class MainWindowController extends BaseController implements Initializabl
         ArrayList<PointIndex2D_F64> indexedPoints = new ArrayList<>(observations.getPoints());
 
         ObservationPointConfig obsConfig = configuration.getObservationPointConfig();
-        ObservationPointRainbowConfig rainbowConfig = obsConfig.getRainbow();
+        ObservationPointRainbowConfig rainbowConfig = obsConfig.getObservationPointRainbowConfig();
 
         gc.setLineWidth(rainbowConfig.getObservationPointLineWidth() * uiState.zoomFactor);
         for (int i = 0; i < indexedPoints.size() - 1; i++) {

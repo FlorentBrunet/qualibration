@@ -3,6 +3,8 @@ package eu.brnt.qualibration.view;
 import eu.brnt.qualibration.controller.BaseController;
 import eu.brnt.qualibration.controller.ConfigurationWindowController;
 import eu.brnt.qualibration.controller.MainWindowController;
+import eu.brnt.qualibration.model.ValueHolder;
+import eu.brnt.qualibration.model.configuration.Configuration;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -23,8 +25,8 @@ public class ViewFactory {
         initializeStage(controller);
     }
 
-    public void showConfigurationWindow(Window owner) {
-        BaseController controller = new ConfigurationWindowController(this, "ConfigurationWindow.fxml");
+    public void showConfigurationWindow(Window owner, Configuration configuration, ValueHolder<Configuration> result) {
+        BaseController controller = new ConfigurationWindowController(this, "ConfigurationWindow.fxml", configuration, result);
         initializeStage(controller, Modality.WINDOW_MODAL, owner);
     }
 
