@@ -18,6 +18,7 @@ import eu.brnt.qualibration.model.ValueHolder;
 import eu.brnt.qualibration.model.configuration.Configuration;
 import eu.brnt.qualibration.model.configuration.ObservationPointConfig;
 import eu.brnt.qualibration.model.configuration.ObservationPointRainbowConfig;
+import eu.brnt.qualibration.model.persist.PersistedProject;
 import eu.brnt.qualibration.view.ViewFactory;
 import georegression.struct.point.Point2D_F64;
 import javafx.application.Platform;
@@ -40,7 +41,9 @@ import lombok.extern.slf4j.Slf4j;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -106,13 +109,52 @@ public class MainWindowController extends BaseController implements Initializabl
         rowsCountSpinner.setValueFactory(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 14)
         );
+        rowsCountSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (project != null) {
+                project.setTargetRowsCount(newValue);
+            }
+        });
+
         columnsCountSpinner.setValueFactory(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 13)
         );
+        columnsCountSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (project != null) {
+                project.setTargetColumnsCount(newValue);
+            }
+        });
+
+        squareSizeEditText.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (project != null) {
+                Double squareSize = null;
+                try {
+                    squareSize = Double.parseDouble(newValue);
+                } catch (NumberFormatException ignored) {
+                }
+                project.setTargetSquareSize(squareSize);
+            }
+        });
+
+        zeroSkewCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (project != null) {
+                project.setCameraModelAssumeZeroSkew(newValue);
+            }
+        });
 
         radialParamsSpinner.setValueFactory(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 8, 2)
         );
+        radialParamsSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (project != null) {
+                project.setCameraModelRadialParameters(newValue);
+            }
+        });
+
+        includeTangentialCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (project != null) {
+                project.setCameraModelIncludeTangential(newValue);
+            }
+        });
 
         ChangeListener<Number> resizeListener = (observable, oldValue, newValue) -> {
             canvas.setWidth(pane.getWidth());
@@ -160,6 +202,74 @@ public class MainWindowController extends BaseController implements Initializabl
         }
 
         reloadProject();
+    }
+
+    @FXML
+    void onSaveClicked() {
+        if (project == null)
+            return;
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        project.setTargetRowsCount(rowsCountSpinner.getValue());
+        project.setTargetColumnsCount(columnsCountSpinner.getValue());
+        try {
+            project.setTargetSquareSize(Double.parseDouble(squareSizeEditText.getText()));
+        } catch (NumberFormatException e) {
+            log.error("Could not parse square size: " + squareSizeEditText.getText(), e);
+            project.setTargetSquareSize(null);
+        }
+
+        project.setCameraModelAssumeZeroSkew(zeroSkewCheckBox.isSelected());
+        project.setCameraModelRadialParameters(radialParamsSpinner.getValue());
+        project.setCameraModelIncludeTangential(includeTangentialCheckBox.isSelected());
+
+        File qualibrationFile = new File(project.getRootDir(), "qualibration.json");
+        try (Writer writer = new FileWriter(qualibrationFile)) {
+            gson.toJson(PersistedProject.fromProject(project), writer);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Qualibration");
+            alert.setHeaderText("Could not save project");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+
+        if (project.getCameraPinholeBrown() != null) {
+            File openCvFile = new File(project.getRootDir(), "opencv.yaml");
+            try (Writer writer = new FileWriter(openCvFile)) {
+                CalibrationIO.saveOpencv(project.getCameraPinholeBrown(), writer);
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Qualibration");
+                alert.setHeaderText("Could not save calibration in OpenCV format");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
+
+            File boofCvFile = new File(project.getRootDir(), "boofcv.yaml");
+            try (Writer writer = new FileWriter(boofCvFile)) {
+                CalibrationIO.save(project.getCameraPinholeBrown(), writer);
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Qualibration");
+                alert.setHeaderText("Could not save calibration in BoofCV format");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
+
+            File internalFile = new File(project.getRootDir(), "internal.json");
+            try (Writer writer = new FileWriter(internalFile)) {
+                CameraDefinition def = project.toInternalCameraDefinition();
+                gson.toJson(def, writer);
+            } catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Qualibration");
+                alert.setHeaderText("Could not save calibration in internal Qualibration format");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
+        }
     }
 
     @FXML

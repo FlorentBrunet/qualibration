@@ -14,7 +14,15 @@ public class Project {
 
     private final List<CalibrationImage> calibrationImages = new LinkedList<>();
 
+    private int targetRowsCount;
+    private int targetColumnsCount;
+    private Double targetSquareSize;
+
     private DetectSingleFiducialCalibration detector;
+
+    private boolean cameraModelAssumeZeroSkew;
+    private int cameraModelRadialParameters;
+    private boolean cameraModelIncludeTangential;
 
     private CameraPinholeBrown cameraPinholeBrown;
 
@@ -34,12 +42,60 @@ public class Project {
         return calibrationImages;
     }
 
+    public int getTargetRowsCount() {
+        return targetRowsCount;
+    }
+
+    public void setTargetRowsCount(int targetRowsCount) {
+        this.targetRowsCount = targetRowsCount;
+    }
+
+    public int getTargetColumnsCount() {
+        return targetColumnsCount;
+    }
+
+    public void setTargetColumnsCount(int targetColumnsCount) {
+        this.targetColumnsCount = targetColumnsCount;
+    }
+
+    public double getTargetSquareSize() {
+        return targetSquareSize;
+    }
+
+    public void setTargetSquareSize(Double targetSquareSize) {
+        this.targetSquareSize = targetSquareSize;
+    }
+
     public DetectSingleFiducialCalibration getDetector() {
         return detector;
     }
 
     public void setDetector(DetectSingleFiducialCalibration detector) {
         this.detector = detector;
+    }
+
+    public boolean isCameraModelAssumeZeroSkew() {
+        return cameraModelAssumeZeroSkew;
+    }
+
+    public void setCameraModelAssumeZeroSkew(boolean cameraModelAssumeZeroSkew) {
+        this.cameraModelAssumeZeroSkew = cameraModelAssumeZeroSkew;
+    }
+
+    public int getCameraModelRadialParameters() {
+        return cameraModelRadialParameters;
+    }
+
+    public void setCameraModelRadialParameters(int cameraModelRadialParameters) {
+        this.cameraModelRadialParameters = cameraModelRadialParameters;
+    }
+
+    public boolean isCameraModelIncludeTangential() {
+        return cameraModelIncludeTangential;
+    }
+
+    public void setCameraModelIncludeTangential(boolean cameraModelIncludeTangential) {
+        this.cameraModelIncludeTangential = cameraModelIncludeTangential;
     }
 
     public CameraPinholeBrown getCameraPinholeBrown() {
