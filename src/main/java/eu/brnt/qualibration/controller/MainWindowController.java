@@ -45,10 +45,7 @@ import java.io.FileWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -380,9 +377,18 @@ public class MainWindowController extends BaseController implements Initializabl
 
     @FXML
     void onHelpClicked() {
+        String version = "?";
+        try {
+            Properties props = new Properties();
+            props.load(getClass().getClassLoader().getResourceAsStream("project.properties"));
+            version = props.getProperty("version");
+        } catch (Exception e) {
+            log.error("Could not load project.properties", e);
+        }
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("About");
-        alert.setHeaderText("Qualibration 0.1");
+        alert.setHeaderText("Qualibration " + version);
         alert.setContentText("MIT License\nCopyright © 2023, Florent Brunet\nhttps://github.com/FlorentBrunet/qualibration");
         alert.showAndWait();
     }
