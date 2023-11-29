@@ -22,11 +22,6 @@
       <HBox>
          <children>
             <Button mnemonicParsing="false" onAction="#onOpenClicked" text="Open folder" />
-            <Button mnemonicParsing="false" onAction="#onSaveClicked" text="Save">
-               <HBox.margin>
-                  <Insets left="4.0" />
-               </HBox.margin>
-            </Button>
             <Button mnemonicParsing="false" onAction="#onConfigurationClicked" text="Configuration">
                <HBox.margin>
                   <Insets left="4.0" />
@@ -55,10 +50,52 @@
             </VBox>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <HBox spacing="4.0">
+                  <HBox alignment="CENTER_LEFT" spacing="4.0">
                      <children>
                         <Button mnemonicParsing="false" onAction="#onZoomOutClicked" prefWidth="26.0" text="-" />
                         <Button mnemonicParsing="false" onAction="#onZoomInClicked" prefWidth="26.0" text="+" />
+                        <Region prefHeight="8.0" HBox.hgrow="ALWAYS" />
+                        <CheckBox fx:id="showUndistortedCheckBox" mnemonicParsing="false" text="Show undistorted with margins →" />
+                        <Label text="T">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="undistMarginTopTextField" alignment="CENTER" prefColumnCount="2" text="0" HBox.hgrow="NEVER">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </TextField>
+                        <Label text=" R">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="undistMarginRightTextField" alignment="CENTER" prefColumnCount="2" text="0">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </TextField>
+                        <Label text=" B">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="undistMarginBottomTextField" alignment="CENTER" prefColumnCount="2" text="0">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </TextField>
+                        <Label text=" L">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="undistMarginLeftTextField" alignment="CENTER" prefColumnCount="2" text="0">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </TextField>
                      </children>
                   </HBox>
                   <Pane fx:id="pane" style="-fx-background-color: gray;" VBox.vgrow="ALWAYS">

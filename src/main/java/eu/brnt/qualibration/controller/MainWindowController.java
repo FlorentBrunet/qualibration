@@ -11,10 +11,7 @@ import boofcv.struct.calib.CameraPinholeBrown;
 import boofcv.struct.geo.PointIndex2D_F64;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import eu.brnt.qualibration.model.CalibrationImage;
-import eu.brnt.qualibration.model.CameraDefinition;
-import eu.brnt.qualibration.model.Project;
-import eu.brnt.qualibration.model.ValueHolder;
+import eu.brnt.qualibration.model.*;
 import eu.brnt.qualibration.model.configuration.Configuration;
 import eu.brnt.qualibration.model.configuration.ObservationPointConfig;
 import eu.brnt.qualibration.model.configuration.ObservationPointRainbowConfig;
@@ -54,6 +51,12 @@ public class MainWindowController extends BaseController implements Initializabl
     @FXML private Node rootNode;
 
     @FXML private ListView<CalibrationImage> imagesListView;
+
+    @FXML private CheckBox showUndistortedCheckBox;
+    @FXML private TextField undistMarginTopTextField;
+    @FXML private TextField undistMarginRightTextField;
+    @FXML private TextField undistMarginBottomTextField;
+    @FXML private TextField undistMarginLeftTextField;
 
     @FXML private Spinner<Integer> rowsCountSpinner;
     @FXML private Spinner<Integer> columnsCountSpinner;
@@ -101,6 +104,65 @@ public class MainWindowController extends BaseController implements Initializabl
         imagesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             log.info("Selected image: {}", newValue);
             redraw();
+        });
+
+        showUndistortedCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (project != null) {
+                redraw();
+            }
+        });
+
+        undistMarginTopTextField.textProperty().addListener(obs -> {
+            if (project != null) {
+                int top = 0;
+                try {
+                    top = Integer.parseInt(undistMarginTopTextField.getText());
+                } catch (Exception ignored) {
+                }
+                project.setUndistMarginTop(top);
+                updateResult();
+                if (showUndistortedCheckBox.isSelected())
+                    redraw();
+            }
+        });
+        undistMarginRightTextField.textProperty().addListener(obs -> {
+            if (project != null) {
+                int right = 0;
+                try {
+                    right = Integer.parseInt(undistMarginRightTextField.getText());
+                } catch (Exception ignored) {
+                }
+                project.setUndistMarginRight(right);
+                updateResult();
+                if (showUndistortedCheckBox.isSelected())
+                    redraw();
+            }
+        });
+        undistMarginBottomTextField.textProperty().addListener(obs -> {
+            if (project != null) {
+                int bottom = 0;
+                try {
+                    bottom = Integer.parseInt(undistMarginBottomTextField.getText());
+                } catch (Exception ignored) {
+                }
+                project.setUndistMarginBottom(bottom);
+                updateResult();
+                if (showUndistortedCheckBox.isSelected())
+                    redraw();
+            }
+        });
+        undistMarginLeftTextField.textProperty().addListener(obs -> {
+            if (project != null) {
+                int left = 0;
+                try {
+                    left = Integer.parseInt(undistMarginLeftTextField.getText());
+                } catch (Exception ignored) {
+                }
+                project.setUndistMarginLeft(left);
+                updateResult();
+                if (showUndistortedCheckBox.isSelected())
+                    redraw();
+            }
         });
 
         rowsCountSpinner.setValueFactory(
@@ -425,7 +487,12 @@ public class MainWindowController extends BaseController implements Initializabl
         if (curCalibrationImage == null) {
             drawEmptyCross(gc, width, height);
         } else {
-            drawImage(gc, curCalibrationImage);
+            boolean showUndist = showUndistortedCheckBox.isSelected();
+            if (showUndist) {
+                drawUndistImage(gc, curCalibrationImage);
+            } else {
+                drawImage(gc, curCalibrationImage);
+            }
         }
     }
 
@@ -541,6 +608,48 @@ public class MainWindowController extends BaseController implements Initializabl
                 gc.strokeText(str, x, y);
                 gc.fillText(str, x, y);
             }
+        }
+    }
+
+    private void drawUndistImage(GraphicsContext gc, CalibrationImage calibrationImage) {
+        if (project == null)
+            return;
+
+        CameraPinholeBrown cpb = project.getCameraPinholeBrown();
+        if (cpb == null) {
+            gc.setFill(Color.BLACK);
+            gc.fillText("Undistorted images cannot be shown until the calibration has been done", 10, 100);
+            return;
+        }
+
+        int top = 0, right = 0, bottom = 0, left = 0;
+        try {
+            top = Integer.parseInt(undistMarginTopTextField.getText());
+        } catch (NumberFormatException e) {
+            log.error("Invalid undist margin top value '{}'", undistMarginTopTextField.getText(), e);
+        }
+        try {
+            right = Integer.parseInt(undistMarginRightTextField.getText());
+        } catch (NumberFormatException e) {
+            log.error("Invalid undist margin right value '{}'", undistMarginRightTextField.getText(), e);
+        }
+        try {
+            bottom = Integer.parseInt(undistMarginBottomTextField.getText());
+        } catch (NumberFormatException e) {
+            log.error("Invalid undist margin bottom value '{}'", undistMarginBottomTextField.getText(), e);
+        }
+        try {
+            left = Integer.parseInt(undistMarginLeftTextField.getText());
+        } catch (NumberFormatException e) {
+            log.error("Invalid undist margin left value '{}'", undistMarginLeftTextField.getText(), e);
+        }
+
+        WritableImage undistImage = calibrationImage.getUndistFxImage(cpb, new UndistMargins(top, right, bottom, left));
+        if (undistImage == null) {
+            gc.fillText("Not an image", 20, 20);
+        } else {
+            double zoom = uiState.zoomFactor;
+            gc.drawImage(undistImage, 0, 0, undistImage.getWidth() * zoom, undistImage.getHeight() * zoom);
         }
     }
 }

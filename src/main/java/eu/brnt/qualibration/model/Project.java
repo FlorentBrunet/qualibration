@@ -26,6 +26,12 @@ public class Project {
 
     private CameraPinholeBrown cameraPinholeBrown;
 
+    private int undistMarginTop;
+    private int undistMarginRight;
+    private int undistMarginBottom;
+    private int undistMarginLeft;
+
+
     public Project(File rootDir) {
         this.rootDir = rootDir;
     }
@@ -106,6 +112,38 @@ public class Project {
         this.cameraPinholeBrown = cameraPinholeBrown;
     }
 
+    public int getUndistMarginTop() {
+        return undistMarginTop;
+    }
+
+    public void setUndistMarginTop(int undistMarginTop) {
+        this.undistMarginTop = undistMarginTop;
+    }
+
+    public int getUndistMarginRight() {
+        return undistMarginRight;
+    }
+
+    public void setUndistMarginRight(int undistMarginRight) {
+        this.undistMarginRight = undistMarginRight;
+    }
+
+    public int getUndistMarginBottom() {
+        return undistMarginBottom;
+    }
+
+    public void setUndistMarginBottom(int undistMarginBottom) {
+        this.undistMarginBottom = undistMarginBottom;
+    }
+
+    public int getUndistMarginLeft() {
+        return undistMarginLeft;
+    }
+
+    public void setUndistMarginLeft(int undistMarginLeft) {
+        this.undistMarginLeft = undistMarginLeft;
+    }
+
     public CameraDefinition toInternalCameraDefinition() {
         if (cameraPinholeBrown == null)
             return null;
@@ -137,10 +175,10 @@ public class Project {
         double t2 = cpb.getT2();
         def.setDistortionCoefficients(List.of(r0, r1, t1, t2, r2));
 
-        def.setDistortionMarginLeft(0);
-        def.setDistortionMarginTop(0);
-        def.setDistortionMarginRight(0);
-        def.setDistortionMarginBottom(0);
+        def.setDistortionMarginLeft(this.undistMarginLeft);
+        def.setDistortionMarginTop(this.undistMarginTop);
+        def.setDistortionMarginRight(this.undistMarginRight);
+        def.setDistortionMarginBottom(this.undistMarginBottom);
 
         def.setRectificationHomography(
                 List.of(
