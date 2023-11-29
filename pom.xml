@@ -7,7 +7,7 @@
 
     <groupId>eu.brnt</groupId>
     <artifactId>qualibration</artifactId>
-    <version>0.3</version>
+    <version>0.4-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

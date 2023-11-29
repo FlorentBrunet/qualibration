@@ -2,6 +2,10 @@
 
 ## Next
 
+-
+
+## Version 0.3
+
 - #18 Display undistorted calibration image
 - #19 Handle margins around undistorted images
 
