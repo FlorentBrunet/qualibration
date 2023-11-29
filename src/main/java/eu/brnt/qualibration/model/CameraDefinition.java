@@ -20,10 +20,10 @@ public class CameraDefinition {
     private double principalPointY;
     private List<Double> distortionCoefficients;
 
-    private int distortionMarginLeft;
     private int distortionMarginTop;
     private int distortionMarginRight;
     private int distortionMarginBottom;
+    private int distortionMarginLeft;
 
     private List<List<Double>> rectificationHomography;
 

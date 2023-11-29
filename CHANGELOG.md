@@ -2,7 +2,8 @@
 
 ## Next
 
-- (to come)
+- #18 Display undistorted calibration image
+- #19 Handle margins around undistorted images
 
 ## Version 0.2 (2023-11-19)
 
