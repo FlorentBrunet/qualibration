@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox fx:id="rootNode" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="4.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label text="Observation points">
@@ -61,6 +60,34 @@
          <children>
             <Label prefWidth="120.0" text="Line width" />
             <Spinner fx:id="obsPointLineWidthSpinner" maxWidth="1.7976931348623157E308" minWidth="100.0" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Spinner>
+         </children>
+      </HBox>
+      <Label text="Undistortion grid">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <VBox.margin>
+            <Insets bottom="4.0" top="8.0" />
+         </VBox.margin>
+      </Label>
+      <HBox alignment="BASELINE_LEFT">
+         <children>
+            <Label prefWidth="120.0" text="Horizontal" />
+            <Spinner fx:id="undistGridHorizSpinner" editable="true" maxWidth="1.7976931348623157E308" minWidth="100.0" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Spinner>
+         </children>
+      </HBox>
+      <HBox alignment="BASELINE_LEFT">
+         <children>
+            <Label prefWidth="120.0" text="Vertical" />
+            <Spinner fx:id="undistGridVertSpinner" editable="true" maxWidth="1.7976931348623157E308" minWidth="100.0" HBox.hgrow="ALWAYS">
                <HBox.margin>
                   <Insets />
                </HBox.margin>

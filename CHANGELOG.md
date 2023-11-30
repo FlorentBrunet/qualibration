@@ -2,7 +2,7 @@
 
 ## Next
 
--
+- #22 Nice popup to set up the undistortion margins
 
 ## Version 0.3
 

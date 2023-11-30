@@ -96,6 +96,11 @@
                               <Font size="10.0" />
                            </font>
                         </TextField>
+                        <Button mnemonicParsing="false" onAction="#onMarginsClicked" text="...">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Button>
                      </children>
                   </HBox>
                   <Pane fx:id="pane" style="-fx-background-color: gray;" VBox.vgrow="ALWAYS">

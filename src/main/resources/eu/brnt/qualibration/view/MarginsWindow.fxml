@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="rootNode" prefHeight="640.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <VBox alignment="TOP_CENTER" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER_LEFT">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#onSameClicked" text="Same" />
+                  <Button mnemonicParsing="false" onAction="#onFitOutsideClicked" text="Fit outside">
+                     <HBox.margin>
+                        <Insets left="8.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#onFitInsideClicked" text="Fit inside">
+                     <HBox.margin>
+                        <Insets left="8.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onMinus5Clicked" prefHeight="26.0" prefWidth="26.0" text="-5">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="8.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onMinus1Clicked" prefHeight="26.0" prefWidth="26.0" text="-1">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="1.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onPlus1Clicked" prefHeight="26.0" prefWidth="26.0" text="+1">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="4.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onPlus5Clicked" prefHeight="26.0" prefWidth="26.0" text="+5">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="1.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Region prefHeight="2.0" HBox.hgrow="ALWAYS" />
+                  <Line endX="16.0" stroke="CORNFLOWERBLUE" strokeWidth="2.0" />
+                  <Label text="Original" textFill="CORNFLOWERBLUE">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="2.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Line endX="16.0" stroke="CRIMSON">
+                     <HBox.margin>
+                        <Insets left="8.0" />
+                     </HBox.margin>
+                  </Line>
+                  <Label text="Undistorted" textFill="CRIMSON">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="2.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Line endX="16.0" stroke="DARKORANGE">
+                     <HBox.margin>
+                        <Insets left="8.0" />
+                     </HBox.margin>
+                  </Line>
+                  <Label text="Final" textFill="DARKORANGE">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="2.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+            <Label text="Top" />
+            <TextField fx:id="topTextField" alignment="CENTER" maxWidth="64.0" prefColumnCount="6" text="0" />
+         </children>
+         <padding>
+            <Insets bottom="8.0" />
+         </padding>
+      </VBox>
+   </top>
+   <left>
+      <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Left" />
+            <TextField fx:id="leftTextField" alignment="CENTER" prefWidth="64.0" text="0" />
+         </children>
+         <padding>
+            <Insets right="8.0" />
+         </padding>
+      </VBox>
+   </left>
+   <right>
+      <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Right" />
+            <TextField fx:id="rightTextField" alignment="CENTER" prefWidth="64.0" text="0" />
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets left="8.0" />
+         </padding>
+      </VBox>
+   </right>
+   <bottom>
+      <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Bottom" />
+            <TextField fx:id="bottomTextField" alignment="CENTER" maxWidth="64.0" text="0" />
+            <HBox alignment="TOP_CENTER" spacing="8.0">
+               <children>
+                  <Button cancelButton="true" mnemonicParsing="false" onAction="#onCancelClicked" text="Cancel" />
+                  <Button defaultButton="true" mnemonicParsing="false" onAction="#onApplyClicked" text="Apply" />
+               </children>
+               <VBox.margin>
+                  <Insets top="16.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+         <padding>
+            <Insets top="8.0" />
+         </padding>
+      </VBox>
+   </bottom>
+   <center>
+      <Pane fx:id="pane" style="-fx-background-color: darkgray;" BorderPane.alignment="CENTER">
+         <children>
+            <Canvas fx:id="canvas" height="200.0" width="200.0" />
+         </children>
+      </Pane>
+   </center>
+   <padding>
+      <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+   </padding>
+</BorderPane>
