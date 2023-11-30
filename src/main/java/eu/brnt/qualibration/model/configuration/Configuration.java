@@ -6,4 +6,5 @@ import lombok.Data;
 public class Configuration {
 
     private ObservationPointConfig observationPointConfig = new ObservationPointConfig();
+    private UndistGridConfig undistGridConfig = new UndistGridConfig();
 }

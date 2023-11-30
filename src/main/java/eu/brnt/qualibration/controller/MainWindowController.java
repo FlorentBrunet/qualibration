@@ -368,6 +368,24 @@ public class MainWindowController extends BaseController implements Initializabl
     }
 
     @FXML
+    void onMarginsClicked() {
+        if (project == null)
+            return;
+
+        ValueHolder<UndistMargins> result = new ValueHolder<>();
+        viewFactory.showMarginsWindow(rootNode.getScene().getWindow(), configuration, project, getMargins(), result);
+        log.info("result={}", result.getValue());
+        if (result.getValue() != null) {
+            undistMarginTopTextField.setText(String.valueOf(result.getValue().getTop()));
+            undistMarginRightTextField.setText(String.valueOf(result.getValue().getRight()));
+            undistMarginBottomTextField.setText(String.valueOf(result.getValue().getBottom()));
+            undistMarginLeftTextField.setText(String.valueOf(result.getValue().getLeft()));
+            updateResult();
+            redraw();
+        }
+    }
+
+    @FXML
     void onDetectCornersClicked() {
         if (project == null)
             return;
@@ -453,6 +471,31 @@ public class MainWindowController extends BaseController implements Initializabl
         alert.setHeaderText("Qualibration " + version);
         alert.setContentText("MIT License\nCopyright © 2023, Florent Brunet\nhttps://github.com/FlorentBrunet/qualibration");
         alert.showAndWait();
+    }
+
+    private UndistMargins getMargins() {
+        int top = 0, right = 0, bottom = 0, left = 0;
+        try {
+            top = Integer.parseInt(undistMarginTopTextField.getText());
+        } catch (NumberFormatException e) {
+            log.error("Invalid undist margin top value '{}'", undistMarginTopTextField.getText(), e);
+        }
+        try {
+            right = Integer.parseInt(undistMarginRightTextField.getText());
+        } catch (NumberFormatException e) {
+            log.error("Invalid undist margin right value '{}'", undistMarginRightTextField.getText(), e);
+        }
+        try {
+            bottom = Integer.parseInt(undistMarginBottomTextField.getText());
+        } catch (NumberFormatException e) {
+            log.error("Invalid undist margin bottom value '{}'", undistMarginBottomTextField.getText(), e);
+        }
+        try {
+            left = Integer.parseInt(undistMarginLeftTextField.getText());
+        } catch (NumberFormatException e) {
+            log.error("Invalid undist margin left value '{}'", undistMarginLeftTextField.getText(), e);
+        }
+        return new UndistMargins(top, right, bottom, left);
     }
 
     private void updateResult() {
@@ -622,29 +665,9 @@ public class MainWindowController extends BaseController implements Initializabl
             return;
         }
 
-        int top = 0, right = 0, bottom = 0, left = 0;
-        try {
-            top = Integer.parseInt(undistMarginTopTextField.getText());
-        } catch (NumberFormatException e) {
-            log.error("Invalid undist margin top value '{}'", undistMarginTopTextField.getText(), e);
-        }
-        try {
-            right = Integer.parseInt(undistMarginRightTextField.getText());
-        } catch (NumberFormatException e) {
-            log.error("Invalid undist margin right value '{}'", undistMarginRightTextField.getText(), e);
-        }
-        try {
-            bottom = Integer.parseInt(undistMarginBottomTextField.getText());
-        } catch (NumberFormatException e) {
-            log.error("Invalid undist margin bottom value '{}'", undistMarginBottomTextField.getText(), e);
-        }
-        try {
-            left = Integer.parseInt(undistMarginLeftTextField.getText());
-        } catch (NumberFormatException e) {
-            log.error("Invalid undist margin left value '{}'", undistMarginLeftTextField.getText(), e);
-        }
+        UndistMargins margins = getMargins();
 
-        WritableImage undistImage = calibrationImage.getUndistFxImage(cpb, new UndistMargins(top, right, bottom, left));
+        WritableImage undistImage = calibrationImage.getUndistFxImage(cpb, margins);
         if (undistImage == null) {
             gc.fillText("Not an image", 20, 20);
         } else {

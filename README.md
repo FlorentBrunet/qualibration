@@ -11,6 +11,7 @@ It's intended to grow with new features: region-of-interest related stuff, handl
 nice visualizations, tools around distortions, ...
 
 ![Screenshot of the main screen](/doc/main_screen.png)
+![Screenshot of the undistortion margins](/doc/undist_margins.png)
 
 ## References
 

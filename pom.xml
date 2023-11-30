@@ -19,6 +19,7 @@
         <logback.version>1.4.11</logback.version>
         <gson.version>2.10.1</gson.version>
         <ejml.version>0.43.1</ejml.version>
+        <junit.version>5.10.1</junit.version>
     </properties>
 
     <dependencies>
@@ -75,6 +76,12 @@
             <groupId>org.ejml</groupId>
             <artifactId>ejml-core</artifactId>
             <version>${ejml.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
         </dependency>
     </dependencies>
 

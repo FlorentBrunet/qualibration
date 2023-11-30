@@ -97,4 +97,30 @@ public final class MathEx {
 
         return values;
     }
+
+    public static Double min(double... values) {
+        if (values == null || values.length == 0)
+            return null;
+
+        double min = values[0];
+
+        for (int i = 1; i < values.length; i++) {
+            min = Math.min(min, values[i]);
+        }
+
+        return min;
+    }
+
+    public static Double max(double... values) {
+        if (values == null || values.length == 0)
+            return null;
+
+        double max = values[0];
+
+        for (int i = 1; i < values.length; i++) {
+            max = Math.max(max, values[i]);
+        }
+
+        return max;
+    }
 }

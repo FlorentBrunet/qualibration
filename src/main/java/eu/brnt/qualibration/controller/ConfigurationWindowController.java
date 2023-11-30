@@ -1,10 +1,7 @@
 package eu.brnt.qualibration.controller;
 
 import eu.brnt.qualibration.model.ValueHolder;
-import eu.brnt.qualibration.model.configuration.Configuration;
-import eu.brnt.qualibration.model.configuration.ObservationPointConfig;
-import eu.brnt.qualibration.model.configuration.ObservationPointDisplayType;
-import eu.brnt.qualibration.model.configuration.ObservationPointRainbowConfig;
+import eu.brnt.qualibration.model.configuration.*;
 import eu.brnt.qualibration.view.ViewFactory;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -30,6 +27,9 @@ public class ConfigurationWindowController extends BaseController implements Ini
     @FXML private Spinner<Integer> obsPointFontSizeSpinner;
     @FXML private Spinner<Double> obsPointRadiusSpinner;
     @FXML private Spinner<Double> obsPointLineWidthSpinner;
+
+    @FXML private Spinner<Integer> undistGridHorizSpinner;
+    @FXML private Spinner<Integer> undistGridVertSpinner;
 
     private final Configuration configuration;
     private final ValueHolder<Configuration> result;
@@ -63,6 +63,15 @@ public class ConfigurationWindowController extends BaseController implements Ini
         obsPointLineWidthSpinner.setValueFactory(
                 new SpinnerValueFactory.DoubleSpinnerValueFactory(0.5, 10, rainbow.getObservationPointLineWidth(), 0.5)
         );
+
+        UndistGridConfig undistGrid = configuration.getUndistGridConfig();
+
+        undistGridHorizSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 256, undistGrid.getHorizontal())
+        );
+        undistGridVertSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 256, undistGrid.getVertical())
+        );
     }
 
     @FXML
@@ -83,6 +92,10 @@ public class ConfigurationWindowController extends BaseController implements Ini
         ObservationPointRainbowConfig rainbow = obsPoint.getObservationPointRainbowConfig();
         rainbow.setObservationPointRadius(obsPointRadiusSpinner.getValue());
         rainbow.setObservationPointLineWidth(obsPointLineWidthSpinner.getValue());
+
+        UndistGridConfig undistGrid = config.getUndistGridConfig();
+        undistGrid.setHorizontal(undistGridHorizSpinner.getValue());
+        undistGrid.setVertical(undistGridVertSpinner.getValue());
 
         this.result.setValue(config);
 
