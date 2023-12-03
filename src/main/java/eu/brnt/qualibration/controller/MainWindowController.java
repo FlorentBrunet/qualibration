@@ -3,6 +3,7 @@ package eu.brnt.qualibration.controller;
 import boofcv.abst.fiducial.calib.ConfigGridDimen;
 import boofcv.abst.geo.calibration.CalibrateMonoPlanar;
 import boofcv.abst.geo.calibration.DetectSingleFiducialCalibration;
+import boofcv.abst.geo.calibration.ImageResults;
 import boofcv.alg.geo.calibration.CalibrationObservation;
 import boofcv.factory.fiducial.FactoryFiducialCalibration;
 import boofcv.io.calibration.CalibrationIO;
@@ -243,6 +244,7 @@ public class MainWindowController extends BaseController implements Initializabl
 
         File[] files = dir.listFiles();
         if (files != null) {
+            Arrays.sort(files, Comparator.comparing(File::getName));
             for (File file : files) {
                 if (file.isFile()) {
                     try {
@@ -430,29 +432,50 @@ public class MainWindowController extends BaseController implements Initializabl
         );
 
         boolean calibratorInitialized = false;
+        List<CalibrationImage> usedImages = new LinkedList<>();
         for (CalibrationImage calibrationImage : project.getCalibrationImages()) {
-            if (calibrationImage.getHasAutoDetectedPoints() == null || !calibrationImage.getHasAutoDetectedPoints())
-                continue;
+            calibrationImage.setErrors(null);
+            if (calibrationImage.getHasAutoDetectedPoints() == null || !calibrationImage.getHasAutoDetectedPoints()) {
+                calibrationImage.setUsedForCalibration(false);
+            } else {
+                calibrationImage.setUsedForCalibration(true);
+                usedImages.add(calibrationImage);
 
-            if (!calibratorInitialized) {
-                calibratorInitialized = true;
+                if (!calibratorInitialized) {
+                    calibratorInitialized = true;
 
-                calibrator.initialize(
-                        calibrationImage.getImage().getWidth(),
-                        calibrationImage.getImage().getHeight(),
-                        List.of(project.getDetector().getLayout())
-                );
+                    calibrator.initialize(
+                            calibrationImage.getImage().getWidth(),
+                            calibrationImage.getImage().getHeight(),
+                            List.of(project.getDetector().getLayout())
+                    );
+                }
+
+                calibrator.addImage(calibrationImage.getDetectedPoints().copy());
             }
-
-            calibrator.addImage(calibrationImage.getDetectedPoints().copy());
         }
 
         CameraModel intrinsic = calibrator.process();
         log.info("Intrinsic: {}", intrinsic);
 
+        List<ImageResults> errors = calibrator.getErrors();
+
+        Iterator<CalibrationImage> it = usedImages.iterator();
+        Iterator<ImageResults> jt = errors.iterator();
+        while (it.hasNext()) {
+            it.next().setErrors(jt.next());
+        }
+
         project.setCameraPinholeBrown((CameraPinholeBrown) intrinsic);
 
         updateResult();
+    }
+
+    @FXML
+    void onAnalyzeErrorsClicked() {
+        if (project == null)
+            return;
+        viewFactory.showErrorsWindow(configuration, project);
     }
 
     @FXML

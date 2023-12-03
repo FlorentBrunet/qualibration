@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="rootNode" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="rootNode" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox>
          <children>
@@ -175,7 +175,7 @@
                         <Insets top="4.0" />
                      </VBox.margin>
                   </Button>
-                  <Label text="Result">
+                  <Label text="Results">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -183,6 +183,7 @@
                         <Insets top="16.0" />
                      </VBox.margin>
                   </Label>
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onAnalyzeErrorsClicked" text="Analyze errors" />
                   <TextArea fx:id="resultTextArea" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets top="4.0" />
