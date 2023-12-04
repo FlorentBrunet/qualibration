@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 0.5
+## Version 0.5.1
 
 - #11 Window to analyze errors per image
 
