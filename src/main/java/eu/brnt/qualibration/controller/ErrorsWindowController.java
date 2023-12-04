@@ -15,14 +15,12 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.VPos;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URL;
@@ -38,6 +36,25 @@ public class ErrorsWindowController extends BaseController implements Initializa
     @FXML private ListView<CalibrationImageForError> imageListView;
 
     @FXML private Label coordinatesLabel;
+
+    @FXML private ComboBox<SortBy> sortByComboBox;
+
+    @AllArgsConstructor
+    private enum SortBy {
+        NAME_ASC("Name ↗"),
+        NAME_DESC("Name ↘"),
+        MEAN_ASC("Mean error ↗"),
+        MEAN_DESC("Mean error ↘"),
+        MAX_ASC("Max error ↗"),
+        MAX_DESC("Max error ↘");
+
+        private final String prettyName;
+
+        @Override
+        public String toString() {
+            return prettyName;
+        }
+    }
 
     private ScaledCanvas scaledCanvas;
 
@@ -155,6 +172,46 @@ public class ErrorsWindowController extends BaseController implements Initializa
         imageListView.setItems(FXCollections.observableList(images));
         imageListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         imageListView.getSelectionModel().selectedItemProperty().addListener(selectionChangedListener);
+
+        sortByComboBox.getItems().addAll(SortBy.values());
+        sortByComboBox.getSelectionModel().select(SortBy.NAME_ASC);
+        sortByComboBox.getSelectionModel().selectedItemProperty().addListener(obs -> {
+            SortBy sortBy = sortByComboBox.getSelectionModel().getSelectedItem();
+
+            Comparator<CalibrationImageForError> comparator = null;
+
+            if (sortBy == SortBy.NAME_ASC || sortBy == SortBy.NAME_DESC) {
+                comparator = Comparator.comparing(o -> o.getCalibrationImage().getFile().getName());
+                if (sortBy == SortBy.NAME_DESC)
+                    comparator = comparator.reversed();
+            } else if (sortBy == SortBy.MEAN_ASC || sortBy == SortBy.MEAN_DESC) {
+                comparator = (o1, o2) -> {
+                    ImageResults e1 = o1.getCalibrationImage().getErrors();
+                    double mean1 = e1 != null ? e1.getMeanError() : Double.MAX_VALUE;
+                    ImageResults e2 = o2.getCalibrationImage().getErrors();
+                    double mean2 = e2 != null ? e2.getMeanError() : Double.MAX_VALUE;
+                    return Double.compare(mean1, mean2);
+                };
+                if (sortBy == SortBy.MEAN_DESC)
+                    comparator = comparator.reversed();
+            } else if (sortBy == SortBy.MAX_ASC || sortBy == SortBy.MAX_DESC) {
+                comparator = (o1, o2) -> {
+                    ImageResults e1 = o1.getCalibrationImage().getErrors();
+                    double max1 = e1 != null ? e1.getMaxError() : Double.MAX_VALUE;
+                    ImageResults e2 = o2.getCalibrationImage().getErrors();
+                    double max2 = e2 != null ? e2.getMaxError() : Double.MAX_VALUE;
+                    return Double.compare(max1, max2);
+                };
+                if (sortBy == SortBy.MAX_DESC)
+                    comparator = comparator.reversed();
+            }
+
+            if (comparator != null) {
+                images.sort(comparator);
+                imageListView.setItems(FXCollections.observableList(images));
+                scaledCanvas.redraw();
+            }
+        });
     }
 
     @FXML
