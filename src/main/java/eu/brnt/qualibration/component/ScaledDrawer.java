@@ -3,9 +3,11 @@ package eu.brnt.qualibration.component;
 import eu.brnt.qualibration.model.Couple;
 import eu.brnt.qualibration.util.ScaleTranslateUtil;
 import javafx.beans.InvalidationListener;
+import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.TextAlignment;
 import org.ejml.data.DMatrixRMaj;
 
 public class ScaledDrawer implements Drawer {
@@ -18,7 +20,7 @@ public class ScaledDrawer implements Drawer {
     private double x1 = 1;
     private double y1 = 1;
 
-    private record Mapping(double s, double tx, double ty) {
+    private record Mapping(double sx, double sy, double tx, double ty) {
     }
 
     private Mapping mapping = null;
@@ -45,17 +47,18 @@ public class ScaledDrawer implements Drawer {
     @Override
     public Couple<Double, Double> pixelToUser(double xPixel, double yPixel) {
         Mapping mapping = getMapping();
-        double s = mapping.s;
+        double sx = mapping.sx;
+        double sy = mapping.sy;
         double tx = mapping.tx;
         double ty = mapping.ty;
-        return new Couple<>((xPixel - tx) / s, (yPixel - ty) / s);
+        return new Couple<>((xPixel - tx) / sx, (yPixel - ty) / sy);
     }
 
     @Override
     public double pixelLengthToUser(double length) {
         Mapping mapping = getMapping();
-        double s = mapping.s;
-        return length / s;
+        double sx = Math.abs(mapping.sx);
+        return length / sx;
     }
 
     @Override
@@ -67,10 +70,10 @@ public class ScaledDrawer implements Drawer {
     public void clearRectScaled(double x, double y, double w, double h) {
         Mapping mapping = getMapping();
         gc.clearRect(
-                mapping.s * x + mapping.tx,
-                mapping.s * y + mapping.ty,
-                mapping.s * w,
-                mapping.s * h
+                mapping.sx * x + mapping.tx,
+                mapping.sy * y + mapping.ty,
+                mapping.sx * w,
+                mapping.sy * h
         );
     }
 
@@ -83,29 +86,32 @@ public class ScaledDrawer implements Drawer {
     public void strokeLineScaled(double x1, double y1, double x2, double y2) {
         Mapping mapping = getMapping();
         gc.strokeLine(
-                mapping.s * x1 + mapping.tx,
-                mapping.s * y1 + mapping.ty,
-                mapping.s * x2 + mapping.tx,
-                mapping.s * y2 + mapping.ty
+                mapping.sx * x1 + mapping.tx,
+                mapping.sy * y1 + mapping.ty,
+                mapping.sx * x2 + mapping.tx,
+                mapping.sy * y2 + mapping.ty
         );
     }
 
     @Override
-    public void strokeRectScaled(double x1, double y1, double w, double h) {
+    public void strokeRectScaled(double x1, double y1, double x2, double y2) {
         Mapping mapping = getMapping();
-        gc.strokeRect(
-                mapping.s * x1 + mapping.tx,
-                mapping.s * y1 + mapping.ty,
-                mapping.s * w,
-                mapping.s * h
-        );
+        double x1p = mapping.sx * x1 + mapping.tx;
+        double y1p = mapping.sy * y1 + mapping.ty;
+        double x2p = mapping.sx * x2 + mapping.tx;
+        double y2p = mapping.sy * y2 + mapping.ty;
+        double x0 = Math.min(x1p, x2p);
+        double y0 = Math.min(y1p, y2p);
+        double w = Math.abs(x1p - x2p);
+        double h = Math.abs(y1p - y2p);
+        gc.strokeRect(x0, y0, w, h);
     }
 
     @Override
     public void fixedSizeMarker(double x, double y, double radiusPixel, char shape) {
         Mapping mapping = getMapping();
-        double xp = mapping.s * x + mapping.tx;
-        double yp = mapping.s * y + mapping.ty;
+        double xp = mapping.sx * x + mapping.tx;
+        double yp = mapping.sy * y + mapping.ty;
         if (shape == 'x') {
             gc.strokeLine(xp - radiusPixel, yp - radiusPixel, xp + radiusPixel, yp + radiusPixel);
             gc.strokeLine(xp + radiusPixel, yp - radiusPixel, xp - radiusPixel, yp + radiusPixel);
@@ -119,12 +125,32 @@ public class ScaledDrawer implements Drawer {
         }
     }
 
+    @Override
+    public void fillText(String text, double x, double y) {
+        Mapping mapping = getMapping();
+        gc.fillText(
+                text,
+                mapping.sx * x + mapping.tx,
+                mapping.sy * y + mapping.ty
+        );
+    }
+
+    @Override
+    public void setTextBaseline(VPos baseline) {
+        gc.setTextBaseline(baseline);
+    }
+
+    @Override
+    public void setTextAlign(TextAlignment align) {
+        gc.setTextAlign(align);
+    }
+
     private Mapping getMapping() {
         if (mapping == null || !mappingUpToDate) {
             double W = canvas.getWidth();
             double H = canvas.getHeight();
-            double w = x1 - x0;
-            double h = y1 - y0;
+            double w = Math.abs(x1 - x0);
+            double h = Math.abs(y1 - y0);
 
             double u0 = x0, v0 = y0, u1 = x1, v1 = y1;
             double u0p, v0p, u1p, v1p;
@@ -148,6 +174,7 @@ public class ScaledDrawer implements Drawer {
             );
             mapping = new Mapping(
                     M.get(0, 0),
+                    M.get(1, 1),
                     M.get(0, 2),
                     M.get(1, 2)
             );

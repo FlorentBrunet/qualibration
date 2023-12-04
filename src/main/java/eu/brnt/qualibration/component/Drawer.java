@@ -1,7 +1,9 @@
 package eu.brnt.qualibration.component;
 
 import eu.brnt.qualibration.model.Couple;
+import javafx.geometry.VPos;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.TextAlignment;
 
 public interface Drawer {
 
@@ -28,4 +30,10 @@ public interface Drawer {
      * Shape is one of 'x', '+', 'o'
      */
     void fixedSizeMarker(double x, double y, double radiusPixel, char shape);
+
+    void fillText(String text, double x, double y);
+
+    void setTextBaseline(VPos baseline);
+
+    void setTextAlign(TextAlignment align);
 }

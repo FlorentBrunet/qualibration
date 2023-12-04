@@ -14,12 +14,14 @@ import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.VPos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -111,7 +113,7 @@ public class ErrorsWindowController extends BaseController implements Initializa
         double mx = 0.1 * w;
         double my = 0.1 * h;
         double m = Math.max(mx, my);
-        scaledCanvas.fitRectangle(minErrX - m, minErrY - m, maxErrX + m, maxErrY + m);
+        scaledCanvas.fitRectangle(minErrX - m, maxErrY + m, maxErrX + m, minErrY - m);
         scaledCanvas.setOnRedrawListener(this::redraw);
 
         scaledCanvas.setOnMouseMovedListener((xPixel, yPixel, userX, userY) ->
@@ -175,7 +177,28 @@ public class ErrorsWindowController extends BaseController implements Initializa
             drawer.strokeLineScaled(minErrX, 0, maxErrX, 0);
 
             drawer.setStroke(Color.BLACK);
-            drawer.strokeRectScaled(minErrX, minErrY, maxErrX - minErrX, maxErrY - minErrY);
+            drawer.strokeRectScaled(minErrX, minErrY, maxErrX, maxErrY);
+
+            drawer.setTextBaseline(VPos.TOP);
+            drawer.setTextAlign(TextAlignment.LEFT);
+            drawer.fillText(String.format(Locale.ENGLISH, "%.2f", minErrX), minErrX, minErrY);
+
+            drawer.setTextAlign(TextAlignment.RIGHT);
+            drawer.fillText(String.format(Locale.ENGLISH, "%.2f", maxErrX), maxErrX, minErrY);
+
+            double m = drawer.pixelLengthToUser(2);
+            drawer.fillText(String.format(Locale.ENGLISH, "%.2f", maxErrY), minErrX - m, maxErrY);
+
+            drawer.setTextBaseline(VPos.BOTTOM);
+            drawer.fillText(String.format(Locale.ENGLISH, "%.2f", minErrY), minErrX - m, minErrY);
+
+            drawer.setTextBaseline(VPos.TOP);
+            drawer.setTextAlign(TextAlignment.CENTER);
+            drawer.fillText("0", 0, minErrY);
+
+            drawer.setTextBaseline(VPos.CENTER);
+            drawer.setTextAlign(TextAlignment.RIGHT);
+            drawer.fillText("0", minErrX - m, 0);
 
             for (CalibrationImageForError image : images) {
                 ImageResults errors = image.getCalibrationImage().getErrors();
