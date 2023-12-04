@@ -6,12 +6,11 @@ import org.junit.jupiter.api.Test;
 import static org.ejml.dense.row.CommonOps_DDRM.mult;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ScaleTranslateUtilIT {
+public class ScaleTranslateUtilTest {
 
     @Test
     void scaleTranslate01() {
         DMatrixRMaj A = ScaleTranslateUtil.fromPoints(new double[]{0, 1}, new double[]{0, 1}, new double[]{0, 1}, new double[]{0, 1});
-        A.print();
         assertTrue(
                 areMatrixEquals(
                         A,
@@ -27,7 +26,6 @@ public class ScaleTranslateUtilIT {
     @Test
     void scaleTranslate02() {
         DMatrixRMaj A = ScaleTranslateUtil.fromPoints(new double[]{0, 1}, new double[]{0, 1}, new double[]{0, 2}, new double[]{0, 2});
-        A.print();
         assertTrue(
                 areMatrixEquals(
                         A,
@@ -43,7 +41,6 @@ public class ScaleTranslateUtilIT {
     @Test
     void scaleTranslate03() {
         DMatrixRMaj A = ScaleTranslateUtil.fromPoints(new double[]{0, 1}, new double[]{0, 1}, new double[]{1, 2}, new double[]{1, 2});
-        A.print();
         assertTrue(
                 areMatrixEquals(
                         A,
@@ -59,7 +56,6 @@ public class ScaleTranslateUtilIT {
     @Test
     void scaleTranslate04() {
         DMatrixRMaj A = ScaleTranslateUtil.fromPoints(new double[]{0, 1}, new double[]{0, 1}, new double[]{2, 4}, new double[]{1, 5});
-        A.print();
         assertTrue(
                 areMatrixEquals(
                         A,
@@ -78,9 +74,6 @@ public class ScaleTranslateUtilIT {
         DMatrixRMaj Ainv = ScaleTranslateUtil.fromPoints(new double[]{2, 4}, new double[]{1, 5}, new double[]{0, 1}, new double[]{0, 1});
         DMatrixRMaj I = new DMatrixRMaj(3, 3);
         mult(A, Ainv, I);
-        A.print();
-        Ainv.print();
-        I.print();
         assertTrue(
                 areMatrixEquals(
                         I,
@@ -96,7 +89,6 @@ public class ScaleTranslateUtilIT {
     @Test
     void scaleTranslate06() {
         DMatrixRMaj A = ScaleTranslateUtil.fromPoints(new double[]{0, 1, 2}, new double[]{0, 1, 2}, new double[]{0, 1, 2}, new double[]{0, 1, 2});
-        A.print();
         assertTrue(
                 areMatrixEquals(
                         A,
