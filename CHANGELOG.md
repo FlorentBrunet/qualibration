@@ -1,8 +1,8 @@
 # Changelog
 
-## Next
+## Version 0.5
 
-- #11 Windows to analyze errors per image
+- #11 Window to analyze errors per image
 
 ## Version 0.4
 
