@@ -2,7 +2,7 @@
 
 ## Next
 
--
+- #11 Windows to analyze errors per image
 
 ## Version 0.4
 
