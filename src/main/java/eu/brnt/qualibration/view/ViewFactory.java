@@ -1,9 +1,6 @@
 package eu.brnt.qualibration.view;
 
-import eu.brnt.qualibration.controller.BaseController;
-import eu.brnt.qualibration.controller.ConfigurationWindowController;
-import eu.brnt.qualibration.controller.MainWindowController;
-import eu.brnt.qualibration.controller.MarginsWindowController;
+import eu.brnt.qualibration.controller.*;
 import eu.brnt.qualibration.model.Project;
 import eu.brnt.qualibration.model.UndistMargins;
 import eu.brnt.qualibration.model.ValueHolder;
@@ -36,6 +33,11 @@ public class ViewFactory {
     public void showMarginsWindow(Window owner, Configuration configuration, Project project, UndistMargins margins, ValueHolder<UndistMargins> result) {
         BaseController controller = new MarginsWindowController(this, "MarginsWindow.fxml", configuration, project, margins, result);
         initializeStage(controller, Modality.WINDOW_MODAL, owner);
+    }
+
+    public void showErrorsWindow(Configuration configuration, Project project) {
+        BaseController controller = new ErrorsWindowController(this, "ErrorsWindow.fxml", configuration, project);
+        initializeStage(controller);
     }
 
     private void initializeStage(BaseController controller) {

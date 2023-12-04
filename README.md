@@ -12,6 +12,7 @@ nice visualizations, tools around distortions, ...
 
 ![Screenshot of the main screen](/doc/main_screen.png)
 ![Screenshot of the undistortion margins](/doc/undist_margins.png)
+![Screenshot of the error analysis](/doc/error_analysis.png)
 
 ## References
 

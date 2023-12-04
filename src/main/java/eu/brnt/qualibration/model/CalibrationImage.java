@@ -1,5 +1,6 @@
 package eu.brnt.qualibration.model;
 
+import boofcv.abst.geo.calibration.ImageResults;
 import boofcv.alg.geo.calibration.CalibrationObservation;
 import boofcv.io.image.ConvertBufferedImage;
 import boofcv.struct.calib.CameraPinholeBrown;
@@ -36,6 +37,12 @@ public class CalibrationImage {
     private BufferedImage undistBufferedImage;
 
     private WritableImage undistFxImage;
+
+    private ImageResults errors;
+
+    // Flag to indicate if the image has actually been used to compute the calibration
+    // (an image can be not used if there was no observation points in it or if the user has discarded it)
+    private boolean usedForCalibration;
 
     public synchronized BufferedImage getImage() {
         return image;

@@ -1,6 +1,7 @@
 package eu.brnt.qualibration.model;
 
 import boofcv.abst.geo.calibration.DetectSingleFiducialCalibration;
+import boofcv.abst.geo.calibration.ImageResults;
 import boofcv.struct.calib.CameraPinholeBrown;
 
 import java.awt.image.BufferedImage;
@@ -25,6 +26,7 @@ public class Project {
     private boolean cameraModelIncludeTangential;
 
     private CameraPinholeBrown cameraPinholeBrown;
+    private List<ImageResults> errors;
 
     private int undistMarginTop;
     private int undistMarginRight;
@@ -110,6 +112,14 @@ public class Project {
 
     public void setCameraPinholeBrown(CameraPinholeBrown cameraPinholeBrown) {
         this.cameraPinholeBrown = cameraPinholeBrown;
+    }
+
+    public List<ImageResults> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<ImageResults> errors) {
+        this.errors = errors;
     }
 
     public int getUndistMarginTop() {

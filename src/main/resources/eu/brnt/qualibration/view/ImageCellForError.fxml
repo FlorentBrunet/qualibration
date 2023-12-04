@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane fx:id="rootNode" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" />
+    <ColumnConstraints hgrow="SOMETIMES" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints vgrow="SOMETIMES" />
+    <RowConstraints vgrow="SOMETIMES" />
+    <RowConstraints vgrow="SOMETIMES" />
+      <RowConstraints vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Label fx:id="nameLabel" text="Name" GridPane.columnIndex="1" />
+      <Label fx:id="meanErrorLabel" text="mean" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label fx:id="maxErrorLabel" text="max" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label fx:id="biasLabel" text="bias" GridPane.columnIndex="1" GridPane.rowIndex="3">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label fx:id="markerLabel" alignment="CENTER" prefHeight="17.0" prefWidth="17.0" text="×" />
+   </children>
+</GridPane>
