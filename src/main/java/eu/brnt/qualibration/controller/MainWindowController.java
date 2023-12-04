@@ -473,7 +473,7 @@ public class MainWindowController extends BaseController implements Initializabl
 
     @FXML
     void onAnalyzeErrorsClicked() {
-        if (project == null)
+        if (project == null || project.getCameraPinholeBrown() == null)
             return;
         viewFactory.showErrorsWindow(configuration, project);
     }
